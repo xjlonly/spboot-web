@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: ${APP_NAME:unnamed}
-  datasource:
+  datasource-master:
     url: jdbc:hsqldb:file:testdb
     username: sa
     password:
@@ -17,6 +17,39 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 1
 
+  datasource-slave:
+    url: jdbc:hsqldb:file:testdb
+    username: sa
+    password:
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    hikari:
+      auto-commit: false
+      connection-timeout: 3000
+      validation-timeout: 3000
+      max-lifetime: 60000
+      maximum-pool-size: 20
+      minimum-idle: 1
+
+  redis:
+    host: ${REDIS_HOST:}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    ssl: ${REDIS_SSL:false}
+    database: ${REDIS_DATABASE:0}
+  rabbitmq:
+    host: 139.199.117.109
+    port: 5672
+    username: jtest
+    password: 123456
+    virtual-host: test
+
+  kafka:
+    bootstrap-servers:
+    consumer:
+      auto-offset-reset: latest
+      max-poll-records: 100
+
+
 management:
   endpoints:
     web:
@@ -26,6 +59,23 @@ management:
 pebble:
   suffix:
   cache: false
+
+storage:
+  type: ${STORGE_TYPE:local}
+  cloud:
+    bucket:
+    access-key:
+    access-secret:
+
+  local:
+    # 文件存储根目录:
+    root-dir: ${STORAGE_LOCAL_ROOT:/Users/storage}
+    # 最大文件大小，默认100K:
+    max-size: ${STORAGE_LOCAL_MAX_SIZE:102400}
+    # 是否允许空文件:
+    allow-empty: false
+    # 允许的文件类型:
+    allow-types: jpg, png, gif
 
 ---
 

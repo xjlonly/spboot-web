@@ -1,7 +1,9 @@
 package org.example.spboot.service;
 
 import java.sql.Statement;
+import java.util.List;
 
+import org.example.spboot.config.RoutingDataSourceContext;
 import org.example.spboot.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,5 +73,9 @@ public class UserService {
 		if (1 != jdbcTemplate.update("UPDATE users SET name = ? WHERE id=?", user.getName(), user.getId())) {
 			throw new RuntimeException("User not found by id");
 		}
+	}
+
+	public List<User> getUsers() {
+		return jdbcTemplate.query("SELECT * FROM users", userRowMapper);
 	}
 }
